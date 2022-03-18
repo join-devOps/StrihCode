@@ -3,17 +3,37 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.ComponentModel;
 
 namespace StrihCode
 {
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
-        public MainWindow()
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private bool _GetHuddenButton = false;
+        public bool GetHuddenButton
         {
-            InitializeComponent();
+            get => _GetHuddenButton;
+            set
+            {
+                _GetHuddenButton = value;
+
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs("GetHuddenButton"));
+                    PropertyChanged(this, new PropertyChangedEventArgs("GetHidden"));
+
+                }
+            }
+        }
+
+        public Visibility GetHidden
+        {
+            get => !GetHuddenButton ? Visibility.Visible : Visibility.Hidden;
         }
 
         private string GetTimeNow
@@ -21,14 +41,22 @@ namespace StrihCode
             get => DateTime.Now.ToString("dd.MM.yyyy");
         }
 
-        private int GetGeneratedFigures()
+        public MainWindow()
+        {
+            InitializeComponent();
+
+            DataContext = this;
+        }
+
+        private char GetGeneratedFigures()
         {
             Random r = new Random();
-            return r.Next(0, 9);
+            return Convert.ToChar(r.Next(0, 9));
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            GetHuddenButton = true;
             string binaryCode = "101";
 
             for (int i = 0; i < binaryCode.Length; i++)
@@ -74,6 +102,7 @@ namespace StrihCode
             {
                 Orientation = Orientation.Horizontal,
             };
+
             // отрисовка левой части штрих-кода
             for (int i = 0; i < binaryCode.Length; i++)
             {
@@ -150,7 +179,7 @@ namespace StrihCode
             // определение двоичного кода правой части
             for (int i = 4; i < 8; i++)
             {
-                //binaryCode += EAN_13.GetRightR(GetGeneratedFigures);
+               binaryCode += EAN_13.GetRightR(GetGeneratedFigures());
             }
 
             StackPanel spRightCodeAndNumber = new StackPanel() // создание StackPanel для хранения правой части штрих-кода и его числового значения

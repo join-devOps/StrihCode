@@ -15,7 +15,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Button Content="Генерация" Click="Button_Click" Height="25" Grid.Row="0" Grid.ColumnSpan="2" VerticalAlignment="Top"/>
-        <StackPanel Name="StackPanel_Code" Grid.RowSpan="2" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <Button Content="Генерация" Visibility="{Binding GetHidden}" Click="Button_Click" Height="25" Grid.Row="0" Grid.ColumnSpan="2" VerticalAlignment="Top"/>
+        <StackPanel Name="StackPanel_Code" Orientation="Horizontal" Grid.RowSpan="2" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center"/>
     </Grid>
 </Window>
